@@ -1,0 +1,38 @@
+version: 2.1
+
+jobs:
+  olx-sre-nd-block1-lesson3-point25-build:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Build job
+          command: npm run lint
+  olx-sre-nd-block1-lesson3-point25-test:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Test job
+          command: npm run test
+  olx-sre-nd-block1-lesson3-point25-analyze:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Analyze job
+          command: npm audit
+
+workflows:
+  olx-sre-nd-block1-lesson3-point25-ci-pipeline:
+    jobs:
+      - olx-sre-nd-block1-lesson3-point25-build
+      - olx-sre-nd-block1-lesson3-point25-test:
+          requires:
+            - olx-sre-nd-block1-lesson3-point25-build
+      - olx-sre-nd-block1-lesson3-point25-analyze:
+          requires:
+            - olx-sre-nd-block1-lesson3-point25-test
