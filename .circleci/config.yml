@@ -6,14 +6,23 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - run: npm i
       - run:
           name: Build job
           command: npm run lint
+      - save_cache:
+          key: "npm-packages"
+          paths:
+            - /src/node_modules
   olx-sre-nd-block1-lesson3-point25-test:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - "npm-packages"      
+      - run: npm i
       - run:
           name: Test job
           command: npm run test
@@ -22,6 +31,9 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - "npm-packages"      
       - run:
           name: Analyze job
           command: npm audit
